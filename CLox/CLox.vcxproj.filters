@@ -24,6 +24,12 @@
     <ClCompile Include="memory.c">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
+    <ClCompile Include="debug.c">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="value.c">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
@@ -33,6 +39,12 @@
       <Filter>Arquivos de Origem</Filter>
     </ClInclude>
     <ClInclude Include="memory.h">
+      <Filter>Arquivos de Origem</Filter>
+    </ClInclude>
+    <ClInclude Include="debug.h">
+      <Filter>Arquivos de Origem</Filter>
+    </ClInclude>
+    <ClInclude Include="value.h">
       <Filter>Arquivos de Origem</Filter>
     </ClInclude>
   </ItemGroup>
