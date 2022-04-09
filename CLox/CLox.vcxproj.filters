@@ -33,6 +33,12 @@
     <ClCompile Include="vm.c">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
+    <ClCompile Include="compiler.c">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="scanner.c">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
@@ -51,6 +57,12 @@
       <Filter>Arquivos de Origem</Filter>
     </ClInclude>
     <ClInclude Include="vm.h">
+      <Filter>Arquivos de Origem</Filter>
+    </ClInclude>
+    <ClInclude Include="compiler.h">
+      <Filter>Arquivos de Origem</Filter>
+    </ClInclude>
+    <ClInclude Include="scanner.h">
       <Filter>Arquivos de Origem</Filter>
     </ClInclude>
   </ItemGroup>

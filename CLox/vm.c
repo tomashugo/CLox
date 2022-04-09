@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "common.h"
+#include "compiler.h"
 #include "debug.h"
 #include "vm.h"
 
@@ -25,12 +26,12 @@ Value pop() {
 }
 
 static InterpretResult run() {
-#define READ_BYTE() (*vm.ip++)
-#define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])
-// This do while block gives us a way to contain multiple statements inside a block that also permits a semicolon at the end
-#define BINARY_OP(op) do { double b = pop(); double a = pop(); push(a op b); } while(false)
+	#define READ_BYTE() (*vm.ip++)
+	#define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])
+	// This do while block gives us a way to contain multiple statements inside a block that also permits a semicolon at the end
+	#define BINARY_OP(op) do { double b = pop(); double a = pop(); push(a op b); } while(false)
 	for (;;) {
-#ifdef DEBUG_TRACE_EXECUTION
+	#ifdef DEBUG_TRACE_EXECUTION
 		printf("          ");
 		for (Value* slot = vm.stack; slot < vm.stackTop; slot++) {
 			printf("[ ");
@@ -39,7 +40,7 @@ static InterpretResult run() {
 		}
 		printf("\n");
 		disassembleInstruction(vm.chunk, (int)(vm.ip - vm.chunk->code));
-#endif // !DEBUG_TRACE_EXECUTION
+	#endif // !DEBUG_TRACE_EXECUTION
 
 		uint8_t instruction;
 		switch (instruction = READ_BYTE()) {
@@ -60,13 +61,12 @@ static InterpretResult run() {
 			}
 		}
 	}
-#undef READ_BYTE
-#undef READ_CONSTANT
-#undef BINARY_OP
+	#undef READ_BYTE
+	#undef READ_CONSTANT
+	#undef BINARY_OP
 }
 
-InterpretResult interpret(Chunk* chunk) {
-	vm.chunk = chunk;
-	vm.ip = vm.chunk->code;
-	return run();
+InterpretResult interpret(const char* source) {
+	compile(source);
+	return INTERPRET_OK;
 }
