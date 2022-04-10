@@ -1,6 +1,7 @@
 // Clox 2022 
 // Copyright - Tomás Hugo Almeida
 
+#define _CRT_SECURE_NO_DEPRECATE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
