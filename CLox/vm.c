@@ -102,6 +102,7 @@ static InterpretResult run() {
 			case OP_NIL: push(NIL_VAL); break;
 			case OP_TRUE: push(BOOL_VAL(true)); break;
 			case OP_FALSE: push(BOOL_VAL(false)); break;
+			case OP_OP: pop(); break;
 			case OP_EQUAL: {
 				Value a = pop();
 				Value b = pop();
@@ -142,9 +143,12 @@ static InterpretResult run() {
 				}
 				push(NUMBER_VAL(-AS_NUMBER(pop())));
 				break;
-			case OP_RETURN: {
+			case OP_PRINT: {
 				printValue(pop());
 				printf("\n");
+				break;
+			}
+			case OP_RETURN: {				
 				return INTERPRET_OK;
 			}
 		}
