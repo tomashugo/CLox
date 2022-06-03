@@ -1,6 +1,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #include "common.h"
 #include "chunk.h"
@@ -11,6 +12,26 @@
 #include "vm.h"
 
 VM vm;
+
+// Begin Native Functions Section
+static Value clockNative(int argCount, Value* args) {
+	return NUMBER_VAL((double)clock() / CLOCKS_PER_SEC);
+}
+
+static Value readNumNative(int argCount, Value* args) {
+	int number;
+	scanf_s("%d", &number);
+	return NUMBER_VAL(number);
+}
+
+static Value readStrNative(int argCount, Value* args) {
+	char str[100];
+	scanf_s("%[^\n]", str, sizeof(str));		
+	
+	return OBJ_VAL(copyString(str,100));
+}
+
+// End Native Functions Section
 
 void resetStack() {
 	vm.stackTop = vm.stack;
@@ -43,12 +64,25 @@ static void runtimeError(const char* format, ...) {
 	vm.objects = NULL;
 }
 
+static void defineNative(const char* name, NativeFn function) {
+	push(OBJ_VAL(copyString(name, (int)strlen(name))));
+	push(OBJ_VAL(newNative(function)));
+	tableSet(&vm.globals, AS_STRING(vm.stack[0]), vm.stack[1]);
+	pop();
+	pop();
+}
+
 void initVM() {
 	vm.stackTop = vm.stack;
 	resetStack();
 	vm.objects = NULL;
 	initTable(&vm.globals);
 	initTable(&vm.strings);
+
+	// initialization of native functions
+	defineNative("clock", clockNative);
+	defineNative("readNum", readNumNative);
+	defineNative("readStr", readStrNative);
 }
 
 void freeVM() {
@@ -92,10 +126,16 @@ static bool call(ObjFunction* function, int argCount) {
 static bool callValue(Value callee, int argCount) {
 	if (IS_OBJ(callee)) {
 		switch (OBJ_TYPE(callee)) {
-		case OBJ_FUNCTION:
-			return call(AS_FUNCTION(callee), argCount);
-		default:
-			break;
+			case OBJ_FUNCTION:
+				return call(AS_FUNCTION(callee), argCount);
+			case OBJ_NATIVE:
+				NativeFn native = AS_NATIVE(callee);
+				Value result = native(argCount, vm.stackTop - argCount);
+				vm.stackTop -= argCount + 1;
+				push(result);
+				return true;
+			default:
+				break;
 		}
 	}
 	runtimeError("Can only call functions and classes.");
