@@ -24,7 +24,7 @@ static void runtimeError(const char* format, ...) {
 	va_end(args);
 	fputs("\n", stderr);
 
-	for (int i = vm.frameCount - 1; i >= 0; i--) {
+	for (int i = vm.frameCount - 1; i > 0; i--) {
 		CallFrame* frame = &vm.frames[i];
 		ObjFunction* function = frame->function;
 		size_t instruction = frame->ip - function->chunk.code - 1;
@@ -257,6 +257,20 @@ static InterpretResult run() {
 				break;	
 			}
 			case OP_RETURN: {				
+				Value result = pop();
+				vm.frameCount--;
+				if (vm.frameCount == 0) {
+					// once it is the vary last CallFrame, it means the entire program is done
+					// pop the main script function from the stack and then exit 
+					pop(); 
+					return INTERPRET_OK;
+				}
+
+				// the top of the stack ends up right at the beginning of the returning function's stack window
+				vm.stackTop = frame->slots;
+				// put the result of the function onto the stack into a lower location
+				push(result);
+				frame = &vm.frames[vm.frameCount - 1];
 				return INTERPRET_OK;
 			}
 		}
