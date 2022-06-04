@@ -26,7 +26,7 @@ static Value readNumNative(int argCount, Value* args) {
 
 static Value readStrNative(int argCount, Value* args) {
 	char str[100];
-	scanf_s("%[^\n]", str, sizeof(str));		
+	scanf_s("%[^\n]", str, (unsigned int)sizeof(str));		
 	
 	return OBJ_VAL(copyString(str,100));
 }
