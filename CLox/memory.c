@@ -25,6 +25,8 @@ static void freeObject(Obj* object) {
 		 * The garbage collector will manage this.
 		 */
 		case OBJ_CLOSURE: {
+			ObjClosure* closure = (ObjClosure*)object;
+			FREE_ARRAY(ObjUpvalue*, closure->upvalues, closure->upvalueCount);
 			FREE(ObjClosure, object);
 			break;
 		}
@@ -43,6 +45,11 @@ static void freeObject(Obj* object) {
 			FREE(ObjString, object);
 			break;
 		}
+		case OBJ_UPVALUE:
+			// Multiple closures can close over the same variable, so ObjUpvalue does not own 
+			// the variable it references.Thus, the only thing to free is the ObjUpvalue itself.
+			FREE(ObjUpvalue, object);
+			break;
 	}
 }
 
