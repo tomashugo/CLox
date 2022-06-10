@@ -69,7 +69,7 @@ typedef struct Compiler {
 } Compiler;
 
 Parser parser;
-Compiler* current = NULL;
+Compiler* current = NULL; // the current compiler
 
 static Chunk* currentChunk() {
 	return &current->function->chunk;

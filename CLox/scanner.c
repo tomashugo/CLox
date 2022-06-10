@@ -30,7 +30,7 @@ static bool isAtEnd() {
 	return *scanner.current == '\0';
 }
 
-static char advance() {
+static char advance() { // first advance the current char and then return the last character
 	scanner.current++;
 	return scanner.current[-1];
 }

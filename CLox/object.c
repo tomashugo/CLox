@@ -13,8 +13,8 @@ static Obj* allocateObject(size_t size, ObjType type) {
 	Obj* object = (Obj*)reallocate(NULL, 0, size);
 	object->type = type;
 
-	object->next = vm.objects;
-	vm.objects = object;
+	object->next = vm.objects; 
+	vm.objects = object; // put this object in the head of vm objects array
 	return object;
 }
 
@@ -86,7 +86,7 @@ ObjString* copyString(const char* chars, int length) {
 	char* heapChars = ALLOCATE(char, length + 1);
 	memcpy(heapChars, chars, length);
 	heapChars[length] = '\0';
-
+	 
 	return allocateString(heapChars, length, hash);
 }
 

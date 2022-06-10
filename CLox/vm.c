@@ -74,7 +74,7 @@ static void defineNative(const char* name, NativeFn function) {
 }
 
 void initVM() {
-	vm.stackTop = vm.stack;
+	vm.stackTop = vm.stack; // redundante
 	resetStack();
 	vm.objects = NULL;
 	initTable(&vm.globals);
@@ -384,7 +384,7 @@ static InterpretResult run() {
 				// put the result of the function onto the stack into a lower location
 				push(result);
 				frame = &vm.frames[vm.frameCount - 1];
-				return INTERPRET_OK;
+				break;
 			}
 		}
 	}

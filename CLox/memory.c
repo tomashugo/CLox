@@ -3,7 +3,7 @@
 #include "memory.h"
 #include "vm.h"
 
-void* reallocate(void* pointer, size_t oldSize, size_t newSize) {
+void* reallocate(void* pointer, size_t oldSize, size_t newSize) { // similar to Lua's realloc wrapper
 	if (newSize == 0) {
 		free(pointer);
 		return NULL;
